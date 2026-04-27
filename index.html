@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)https://silver-sorbet-5f72cf.netlify.app/ -->
+<html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0a08">
+<title>Hasnobia · הסנוביה</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;%3E%3Ctext y=&#39;.9em&#39; font-size=&#39;90&#39;%3E%F0%9F%94%A5%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0d0a08;
+  --bg-mid: #1a1410;
+  --bg-card: #221813;
+  --ember: #ff6b1a;
+  --ember-bright: #ff9544;
+  --ember-soft: rgba(255, 107, 26, 0.15);
+  --gold: #ffc857;
+  --gold-soft: rgba(255, 200, 87, 0.2);
+  --cream: #f4e5c8;
+  --cream-dim: #c9b896;
+  --smoke: #6b5d4f;
+  --char: #2a1f17;
+  --green: #7fb069;
+  --green-bright: #a3d977;
+  --red: #c84b4b;
+  --maybe: #d9a566;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg-deep);
+  color: var(--cream);
+  font-family: 'Heebo', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  position: relative;
+  direction: rtl;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bg-fire {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 110%, rgba(255, 107, 26, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 30% 90%, rgba(255, 200, 87, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 70% 95%, rgba(200, 75, 23, 0.12) 0%, transparent 60%);
+  animation: flicker 5s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  25% { opacity: 0.92; transform: scale(1.01); }
+  50% { opacity: 1.05; transform: scale(0.99); }
+  75% { opacity: 0.96; transform: scale(1.005); }
+}
+
+.bg-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(1px 1px at 23% 14%, rgba(255, 229, 200, 0.6), transparent),
+    radial-gradient(1px 1px at 67% 8%, rgba(255, 229, 200, 0.4), transparent),
+    radial-gradient(1px 1px at 89% 22%, rgba(255, 229, 200, 0.5), transparent),
+    radial-gradient(1px 1px at 12% 31%, rgba(255, 229, 200, 0.3), transparent),
+    radial-gradient(1px 1px at 45% 5%, rgba(255, 229, 200, 0.5), transparent),
+    radial-gradient(1px 1px at 78% 35%, rgba(255, 229, 200, 0.4), transparent),
+    radial-gradient(1px 1px at 33% 27%, rgba(255, 229, 200, 0.3), transparent);
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.ember-particle {
+  position: fixed;
+  bottom: -10px;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, var(--ember-bright), var(--ember));
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--ember-bright);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: rise linear infinite;
+}
+
+@keyframes rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+}
+
+main {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem 1.1rem 3rem;
+}
+
+.header {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+  position: relative;
+}
+
+.brand {
+  font-family: 'Suez One', serif;
+  font-size: clamp(3.5rem, 14vw, 5.5rem);
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffd97a 0%, var(--ember) 55%, #b8390a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 0.95;
+  filter: drop-shadow(0 0 24px rgba(255, 107, 26, 0.45));
+  animation: brand-glow 4s ease-in-out infinite;
+}
+
+.brand-en {
+  font-family: 'Suez One', serif;
+  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  margin-top: 0.4rem;
+  opacity: 0.7;
+}
+
+@keyframes brand-glow {
+  0%, 100% { filter: drop-shadow(0 0 24px rgba(255, 107, 26, 0.45)); }
+  50% { filter: drop-shadow(0 0 36px rgba(255, 107, 26, 0.7)); }
+}
+
+.tagline {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--cream-dim);
+  margin-top: 0.3rem;
+  letter-spacing: 0.06em;
+  font-style: italic;
+}
+
+.divider-flame {
+  text-align: center;
+  margin: 1.2rem 0 1rem;
+  font-size: 1rem;
+  color: var(--ember);
+  letter-spacing: 1.5em;
+  padding-right: 1.5em;
+  opacity: 0.7;
+}
+
+.cloud-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'Frank Ruhl Libre', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--cream-dim);
+  margin: 0 auto 1.25rem;
+  padding: 0.45rem 0.9rem;
+  background: rgba(127, 176, 105, 0.06);
+  border: 1px solid rgba(127, 176, 105, 0.15);
+  border-radius: 999px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(42, 31, 23, 0.5), rgba(20, 14, 11, 0.65));
+  border: 1px solid rgba(255, 200, 87, 0.12);
+  border-radius: 18px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  animation: card-in 0.6s ease-out backwards;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 200, 87, 0.35), transparent);
+}
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.25s; }
+.card:nth-child(4) { animation-delay: 0.35s; }
+.card:nth-child(5) { animation-delay: 0.45s; }
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+  font-family: 'Suez One', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.card-title-icon {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 6px var(--ember-soft));
+}
+
+.countdown-card {
+  text-align: center;
+  background:
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(255, 107, 26, 0.15) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(42, 31, 23, 0.6), rgba(20, 14, 11, 0.7));
+  padding: 1.75rem 1.25rem;
+}
+
+.countdown-status {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 0.95rem;
+  color: var(--cream-dim);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+.countdown-date {
+  font-family: 'Suez One', serif;
+  font-size: 1.15rem;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+  line-height: 1.3;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.countdown-unit {
+  background: rgba(13, 10, 8, 0.7);
+  border-radius: 12px;
+  padding: 0.85rem 0.3rem;
+  border: 1px solid rgba(255, 200, 87, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-unit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 100%, rgba(255, 107, 26, 0.15), transparent 60%);
+}
+
+.countdown-num {
+  font-family: 'Suez One', serif;
+  font-size: clamp(1.7rem, 7vw, 2.4rem);
+  color: var(--ember-bright);
+  line-height: 1;
+  text-shadow: 0 0 16px rgba(255, 107, 26, 0.6);
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-label {
+  font-size: 0.7rem;
+  color: var(--smoke);
+  margin-top: 0.4rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.no-date { padding: 1rem 0; }
+
+.no-date-text {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-style: italic;
+  color: var(--cream-dim);
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.event-now {
+  font-family: 'Suez One', serif;
+  font-size: 1.6rem;
+  color: var(--ember-bright);
+  text-shadow: 0 0 20px rgba(255, 107, 26, 0.6);
+  padding: 1.5rem 0 0.5rem;
+  animation: pulse-fire 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-fire {
+  0%, 100% { text-shadow: 0 0 20px rgba(255, 107, 26, 0.6); }
+  50% { text-shadow: 0 0 32px rgba(255, 107, 26, 0.9), 0 0 60px rgba(255, 200, 87, 0.4); }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 200, 87, 0.3);
+  background: rgba(255, 107, 26, 0.12);
+  color: var(--cream);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.btn:hover, .btn:active {
+  background: rgba(255, 107, 26, 0.25);
+  border-color: var(--ember);
+  transform: translateY(-1px);
+}
+
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--ember) 0%, #cc4d0e 100%);
+  border-color: var(--ember-bright);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(255, 107, 26, 0.3);
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background: linear-gradient(135deg, var(--ember-bright) 0%, var(--ember) 100%);
+  box-shadow: 0 6px 22px rgba(255, 107, 26, 0.45);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: rgba(255, 200, 87, 0.2);
+}
+
+.date-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.date-input {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Heebo', sans-serif;
+  font-size: 1rem;
+  padding: 0.7rem 0.9rem;
+  background: rgba(13, 10, 8, 0.7);
+  border: 1px solid rgba(255, 200, 87, 0.2);
+  border-radius: 12px;
+  color: var(--cream);
+  min-height: 44px;
+  direction: ltr;
+  text-align: right;
+  color-scheme: dark;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: var(--ember);
+  box-shadow: 0 0 0 3px var(--ember-soft);
+}
+
+.location-display {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.1rem;
+  color: var(--cream);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.location-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--gold-soft);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.location-link:hover { background: var(--gold-soft); }
+
+.attendance-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.summary-pill {
+  text-align: center;
+  padding: 0.65rem 0.4rem;
+  border-radius: 10px;
+  background: rgba(13, 10, 8, 0.5);
+  border: 1px solid rgba(255, 200, 87, 0.08);
+}
+
+.summary-pill.yes { border-color: rgba(127, 176, 105, 0.3); }
+.summary-pill.maybe { border-color: rgba(217, 165, 102, 0.3); }
+.summary-pill.no { border-color: rgba(200, 75, 75, 0.3); }
+
+.summary-num {
+  font-family: 'Suez One', serif;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.summary-pill.yes .summary-num { color: var(--green-bright); }
+.summary-pill.maybe .summary-num { color: var(--maybe); }
+.summary-pill.no .summary-num { color: var(--red); }
+
+.summary-label {
+  font-size: 0.75rem;
+  color: var(--cream-dim);
+  margin-top: 0.25rem;
+}
+
+.member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.member-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(13, 10, 8, 0.4);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.member-row.is-me {
+  border-color: var(--gold-soft);
+  background: rgba(255, 200, 87, 0.05);
+}
+
+.member-name {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.me-badge {
+  font-size: 0.65rem;
+  background: var(--gold);
+  color: var(--char);
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.attend-buttons {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.attend-btn {
+  border: 1px solid rgba(255, 200, 87, 0.15);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--cream-dim);
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 48px;
+  min-height: 36px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.attend-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.attend-btn.active.yes {
+  background: var(--green);
+  border-color: var(--green-bright);
+  color: #0a1208;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(127, 176, 105, 0.4);
+}
+
+.attend-btn.active.maybe {
+  background: var(--maybe);
+  border-color: #f0c47a;
+  color: #2a1f0a;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(217, 165, 102, 0.4);
+}
+
+.attend-btn.active.no {
+  background: var(--red);
+  border-color: #e06b6b;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(200, 75, 75, 0.3);
+}
+
+.calc-banner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+  .calc-banner {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.35rem;
+  }
+  .calc-pill { padding: 0.55rem 0.5rem; }
+  .calc-pill-label { font-size: 0.7rem; }
+  .calc-pill-value { font-size: 0.95rem; }
+  .calc-pill-status { font-size: 0.72rem; }
+}
+
+.calc-pill {
+  background: linear-gradient(135deg, rgba(255, 107, 26, 0.12), rgba(255, 200, 87, 0.06));
+  border: 1px solid rgba(255, 200, 87, 0.2);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+  position: relative;
+}
+
+.calc-pill-label {
+  font-size: 0.75rem;
+  color: var(--cream-dim);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.calc-pill-value {
+  font-family: 'Suez One', serif;
+  font-size: 1.05rem;
+  color: var(--gold);
+  line-height: 1.2;
+}
+
+.calc-pill-status { font-size: 0.78rem; margin-top: 0.2rem; }
+.calc-pill-status.ok { color: var(--green-bright); }
+.calc-pill-status.short { color: var(--maybe); }
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.item-row {
+  background: rgba(13, 10, 8, 0.4);
+  border: 1px solid rgba(255, 200, 87, 0.08);
+  border-radius: 12px;
+  padding: 0.85rem;
+  transition: all 0.2s;
+}
+
+.item-row.has-bringers {
+  border-color: rgba(127, 176, 105, 0.25);
+  background: linear-gradient(135deg, rgba(127, 176, 105, 0.06), rgba(13, 10, 8, 0.4));
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.item-icon {
+  font-size: 1.1rem;
+  width: 1.6rem;
+  text-align: center;
+}
+
+.item-name {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--cream);
+  flex: 1;
+}
+
+.item-check {
+  color: var(--green-bright);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.item-bringers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.bringer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 200, 87, 0.1);
+  border: 1px solid rgba(255, 200, 87, 0.2);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--cream);
+}
+
+.bringer-chip.is-me {
+  background: rgba(127, 176, 105, 0.18);
+  border-color: var(--green);
+  color: var(--green-bright);
+}
+
+.bringer-remove {
+  cursor: pointer;
+  color: var(--red);
+  font-weight: 700;
+  margin-right: 0.1rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.15rem;
+}
+
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-right: 0.3rem;
+}
+
+.qty-btn {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 200, 87, 0.2);
+  color: var(--gold);
+  border-radius: 6px;
+  width: 22px;
+  height: 22px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.qty-display {
+  min-width: 28px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.add-me-btn {
+  background: transparent;
+  border: 1px dashed rgba(255, 200, 87, 0.3);
+  color: var(--gold);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.add-me-btn:hover, .add-me-btn:active {
+  background: rgba(255, 200, 87, 0.08);
+  border-style: solid;
+  border-color: var(--gold);
+}
+
+.identity-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 10, 8, 0.92);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.identity-modal {
+  max-width: 420px;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(42, 31, 23, 0.85), rgba(20, 14, 11, 0.9));
+  border: 1px solid var(--gold-soft);
+  border-radius: 22px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.identity-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ember), var(--gold), var(--ember), transparent);
+}
+
+.identity-title {
+  font-family: 'Suez One', serif;
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.identity-sub {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-style: italic;
+  color: var(--cream-dim);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.identity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.identity-btn {
+  background: rgba(255, 107, 26, 0.08);
+  border: 1px solid rgba(255, 200, 87, 0.18);
+  color: var(--cream);
+  padding: 0.85rem 0.5rem;
+  border-radius: 12px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.identity-btn:hover, .identity-btn:active {
+  background: rgba(255, 107, 26, 0.2);
+  border-color: var(--ember);
+  transform: translateY(-1px);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: var(--smoke);
+  font-family: 'Frank Ruhl Libre', serif;
+  font-style: italic;
+}
+
+.footer-me {
+  color: var(--cream-dim);
+  margin-bottom: 0.4rem;
+}
+
+.footer-link {
+  color: var(--gold);
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--gold-soft);
+  padding-bottom: 1px;
+}
+
+.sync-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-bright);
+  box-shadow: 0 0 8px var(--green-bright);
+  margin-left: 0.4rem;
+  animation: sync-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sync-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.sync-dot.connecting {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  animation: sync-pulse 0.8s ease-in-out infinite;
+}
+
+.sync-dot.error {
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+}
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-deep);
+  z-index: 200;
+  gap: 1rem;
+}
+
+.loading-flame {
+  font-size: 3rem;
+  animation: pulse-fire 1.2s ease-in-out infinite;
+}
+
+.loading-text {
+  font-family: 'Frank Ruhl Libre', serif;
+  color: var(--cream-dim);
+  font-style: italic;
+}
+
+@media (max-width: 380px) {
+  .countdown-num { font-size: 1.5rem; }
+  .countdown-label { font-size: 0.65rem; letter-spacing: 0.08em; }
+  .attend-btn { padding: 0.4rem 0.45rem; min-width: 42px; font-size: 0.8rem; }
+  .identity-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-stars"></div>
+<div class="bg-fire"></div>
+<div class="grain"></div>
+
+<div id="emberContainer"><div class="ember-particle" style="left: 75.1366%; animation-duration: 6.4428s; animation-delay: 0s; width: 3.85018px; height: 3.85018px;"></div><div class="ember-particle" style="left: 9.86535%; animation-duration: 4.15727s; animation-delay: 0s; width: 3.51415px; height: 3.51415px;"></div><div class="ember-particle" style="left: 27.2669%; animation-duration: 7.32039s; animation-delay: 0s; width: 4.96654px; height: 4.96654px;"></div><div class="ember-particle" style="left: 67.5513%; animation-duration: 6.51468s; animation-delay: 0s; width: 4.10262px; height: 4.10262px;"></div><div class="ember-particle" style="left: 20.8437%; animation-duration: 5.4233s; animation-delay: 0s; width: 2.31452px; height: 2.31452px;"></div><div class="ember-particle" style="left: 47.0767%; animation-duration: 4.14044s; animation-delay: 0s; width: 4.03683px; height: 4.03683px;"></div><div class="ember-particle" style="left: 64.8415%; animation-duration: 4.27241s; animation-delay: 0s; width: 4.93966px; height: 4.93966px;"></div><div class="ember-particle" style="left: 30.2543%; animation-duration: 7.29526s; animation-delay: 0s; width: 4.41872px; height: 4.41872px;"></div><div class="ember-particle" style="left: 15.4323%; animation-duration: 4.04789s; animation-delay: 0s; width: 4.74586px; height: 4.74586px;"></div></div>
+
+<div id="loadingScreen" class="loading-screen" style="display: none;">
+  <div class="loading-flame">🔥</div>
+  <div class="loading-text">מתחבר למדורה...</div>
+</div>
+
+<main id="app" style="display: block;">
+    <div class="identity-overlay">
+      <div class="identity-modal">
+        <div class="identity-title">ברוכים הבאים</div>
+        <div class="identity-sub">מי אתה מהחבר'ה?</div>
+        <div class="identity-grid">
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;הרשטיק&#39;)">הרשטיק</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;יועד&#39;)">יועד</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;גלעד&#39;)">גלעד</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;סעדה&#39;)">סעדה</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;גימי&#39;)">גימי</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;חנוך&#39;)">חנוך</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;רוזה&#39;)">רוזה</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;אילוש&#39;)">אילוש</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;גרשוני&#39;)">גרשוני</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;מנצור&#39;)">מנצור</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;פינטו&#39;)">פינטו</button>
+          
+            <button class="identity-btn" onclick="pickIdentity(&#39;עטיה&#39;)">עטיה</button>
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getDatabase, ref, onValue, set, update, remove, get, child
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// ========== FIREBASE CONFIG ==========
+const firebaseConfig = {
+  apiKey: "AIzaSyDjKKTrPczUUraG06TYiLmtvDQrAr3Fo1k",
+  authDomain: "hasnobia-6ba8e.firebaseapp.com",
+  databaseURL: "https://hasnobia-6ba8e-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "hasnobia-6ba8e",
+  storageBucket: "hasnobia-6ba8e.firebasestorage.app",
+  messagingSenderId: "698515867346",
+  appId: "1:698515867346:web:ad80da6fee935d3023cf0b"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
+const eventRef = ref(db, 'snobia/event');
+
+// ========== CONFIG ==========
+const MEMBERS = [
+  'הרשטיק', 'יועד', 'גלעד', 'סעדה', 'גימי', 'חנוך',
+  'רוזה', 'אילוש', 'גרשוני', 'מנצור', 'פינטו', 'עטיה'
+];
+
+const ITEMS = [
+  { id: 'mangal', name: 'מנגל', icon: '🔥' },
+  { id: 'coal', name: 'פחמים', icon: '🪨' },
+  { id: 'meat', name: 'בשר', icon: '🥩', hasQty: true, unit: 'ק״ג', perPerson: 0.5, step: 0.5 },
+  { id: 'drinks', name: 'שתייה קלה', icon: '🥤', hasQty: true, unit: 'בקבוקים', perPerson: 1/3, step: 1 },
+  { id: 'beers', name: 'בירות', icon: '🍺', hasQty: true, unit: 'בירות', perPerson: 2, step: 1 },
+  { id: 'water', name: 'מים', icon: '💧', hasQty: true, step: 1 },
+  { id: 'snacks', name: 'פיצוחים', icon: '🥜' },
+  { id: 'lighting', name: 'תאורה', icon: '💡', hasQty: true, step: 1 },
+  { id: 'chairs', name: 'כסאות', icon: '💺', hasQty: true, step: 1 },
+  { id: 'table', name: 'שולחן', icon: '🟫' },
+  { id: 'tongs', name: 'מלקחיים', icon: '🥢' },
+  { id: 'board', name: 'קרש חיתוך', icon: '🪵' },
+  { id: 'salt', name: 'מלח ופלפל', icon: '🧂' },
+  { id: 'knife', name: 'סכין חד', icon: '🔪' }
+];
+
+const DEFAULT_LOC_URL = 'https://maps.google.com/?q=31.691273,34.931911';
+const DEFAULT_LOC_TEXT = 'המקום הקבוע שלנו';
+const IDENTITY_KEY = 'hasnobia-me';
+
+// ========== STATE ==========
+let state = {
+  eventDate: null,
+  attendance: {},
+  items: {}
+};
+
+let myName = null;
+let editingDate = false;
+let syncStatus = 'connecting';
+let firstLoad = true;
+
+// ========== FIREBASE LISTENERS ==========
+onValue(eventRef, (snapshot) => {
+  const data = snapshot.val();
+  state = {
+    eventDate: data?.eventDate || null,
+    attendance: data?.attendance || {},
+    items: data?.items || {}
+  };
+  setSyncStatus('ok');
+  if (firstLoad) {
+    firstLoad = false;
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+  render();
+}, (error) => {
+  console.error('Firebase error:', error);
+  setSyncStatus('error');
+  if (firstLoad) {
+    firstLoad = false;
+    document.getElementById('loadingScreen').innerHTML = `
+      <div class="loading-flame" style="animation: none;">⚠️</div>
+      <div class="loading-text">בעיה בחיבור לענן</div>
+      <div class="loading-text" style="font-size: 0.85rem; max-width: 320px; text-align: center;">
+        ${error.message || 'בדוק את החיבור לאינטרנט ונסה לרענן'}
+      </div>
+    `;
+  }
+});
+
+// ========== IDENTITY ==========
+function loadIdentity() {
+  try { myName = localStorage.getItem(IDENTITY_KEY); } catch (e) {}
+}
+
+function saveIdentity(name) {
+  myName = name;
+  try { localStorage.setItem(IDENTITY_KEY, name); } catch (e) {}
+}
+
+window.changeIdentity = function() {
+  myName = null;
+  try { localStorage.removeItem(IDENTITY_KEY); } catch (e) {}
+  render();
+};
+
+window.pickIdentity = function(name) {
+  saveIdentity(name);
+  render();
+};
+
+// ========== HELPERS ==========
+function setSyncStatus(s) {
+  syncStatus = s;
+  document.querySelectorAll('.sync-dot').forEach(dot => {
+    dot.className = 'sync-dot ' + (s === 'ok' ? '' : s);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  try {
+    return new Intl.DateTimeFormat('he-IL', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    }).format(d);
+  } catch (e) { return d.toLocaleString('he-IL'); }
+}
+
+function timeUntil(iso) {
+  if (!iso) return null;
+  const target = new Date(iso).getTime();
+  const now = Date.now();
+  const diff = target - now;
+  if (diff < 0 && diff > -6 * 3600 * 1000) return { mode: 'now' };
+  if (diff < -12 * 3600 * 1000) return { mode: 'past' };
+  if (diff < 0) return { mode: 'now' };
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  return { mode: 'future', days, hours, minutes, seconds };
+}
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function isoToLocalInput(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0, 16);
+}
+
+function attendCount(value) {
+  return Object.values(state.attendance || {}).filter(v => v === value).length;
+}
+
+function getBringers(itemId) {
+  const data = state.items?.[itemId];
+  if (!data) return [];
+  // Convert object {key: {name, qty}} to array
+  return Object.values(data);
+}
+
+function totalQty(itemId) {
+  return getBringers(itemId).reduce((sum, b) => sum + (b.qty || 0), 0);
+}
+
+// ========== ACTIONS (Firebase writes) ==========
+window.confirmDate = async function() {
+  const input = document.getElementById('dateInput');
+  if (!input || !input.value) return;
+  const local = new Date(input.value);
+  if (isNaN(local)) return;
+  setSyncStatus('connecting');
+  try {
+    await update(eventRef, { eventDate: local.toISOString() });
+    editingDate = false;
+    // render() will be triggered by onValue
+  } catch (e) {
+    console.error(e);
+    setSyncStatus('error');
+    alert('שמירה נכשלה. בדוק את החיבור לאינטרנט.');
+  }
+};
+
+window.startEditDate = function() {
+  editingDate = true;
+  render();
+};
+
+window.cancelEditDate = function() {
+  editingDate = false;
+  render();
+};
+
+window.clearEvent = async function() {
+  if (!confirm('לאפס את האירוע? התאריך, ההגעות והפריטים יימחקו.')) return;
+  setSyncStatus('connecting');
+  try {
+    await set(eventRef, { eventDate: null, attendance: {}, items: {} });
+  } catch (e) {
+    console.error(e);
+    setSyncStatus('error');
+    alert('פעולה נכשלה.');
+  }
+};
+
+window.setAttendance = async function(name, value) {
+  const current = state.attendance?.[name];
+  setSyncStatus('connecting');
+  try {
+    if (current === value) {
+      // toggle off
+      await update(ref(db, 'snobia/event/attendance'), { [name]: null });
+    } else {
+      await update(ref(db, 'snobia/event/attendance'), { [name]: value });
+    }
+  } catch (e) {
+    console.error(e);
+    setSyncStatus('error');
+  }
+};
+
+window.toggleBringing = async function(itemId) {
+  if (!myName) return;
+  const item = ITEMS.find(i => i.id === itemId);
+  const itemRef = ref(db, `snobia/event/items/${itemId}`);
+  setSyncStatus('connecting');
+  try {
+    const snap = await get(itemRef);
+    const data = snap.val() || {};
+    // Find existing entry by name
+    const existingKey = Object.keys(data).find(k => data[k]?.name === myName);
+    if (existingKey) {
+      // Remove
+      await update(itemRef, { [existingKey]: null });
+    } else {
+      // Add - use sanitized name as key
+      const key = sanitizeKey(myName);
+      const entry = { name: myName };
+      if (item.hasQty) entry.qty = item.step || 1;
+      await update(itemRef, { [key]: entry });
+    }
+  } catch (e) {
+    console.error(e);
+    setSyncStatus('error');
+  }
+};
+
+window.changeQty = async function(itemId, delta) {
+  if (!myName) return;
+  const item = ITEMS.find(i => i.id === itemId);
+  const itemRef = ref(db, `snobia/event/items/${itemId}`);
+  setSyncStatus('connecting');
+  try {
+    const snap = await get(itemRef);
+    const data = snap.val() || {};
+    const myKey = Object.keys(data).find(k => data[k]?.name === myName);
+    if (!myKey) return;
+    const newQty = Math.max(0, Math.round((data[myKey].qty + delta) * 10) / 10);
+    if (newQty <= 0) {
+      await update(itemRef, { [myKey]: null });
+    } else {
+      await update(ref(db, `snobia/event/items/${itemId}/${myKey}`), { qty: newQty });
+    }
+  } catch (e) {
+    console.error(e);
+    setSyncStatus('error');
+  }
+};
+
+window.removeBringer = async function(itemId, name) {
+  const itemRef = ref(db, `snobia/event/items/${itemId}`);
+  setSyncStatus('connecting');
+  try {
+    const snap = await get(itemRef);
+    const data = snap.val() || {};
+    const key = Object.keys(data).find(k => data[k]?.name === name);
+    if (key) await update(itemRef, { [key]: null });
+  } catch (e) {
+    console.error(e);
+    setSyncStatus('error');
+  }
+};
+
+function sanitizeKey(name) {
+  // Firebase keys can't contain . # $ [ ] /
+  return name.replace(/[.#$\[\]\/]/g, '_');
+}
+
+// ========== RENDER ==========
+function renderCountdown() {
+  const t = timeUntil(state.eventDate);
+
+  if (!state.eventDate) {
+    return `
+      <div class="card countdown-card">
+        <div class="card-title"><span class="card-title-icon">🔥</span>המדורה הבאה</div>
+        <div class="no-date">
+          <div class="no-date-text">עוד לא נקבע תאריך למדורה הבאה</div>
+          ${editingDate ? renderDateEditor() : `
+            <button class="btn btn-primary" onclick="startEditDate()">קבע תאריך</button>
+          `}
+        </div>
+      </div>
+    `;
+  }
+
+  if (t.mode === 'now') {
+    return `
+      <div class="card countdown-card">
+        <div class="card-title"><span class="card-title-icon">🔥</span>המדורה הבאה</div>
+        <div class="event-now">המדורה בעיצומה!</div>
+        <div class="countdown-date">${escapeHtml(formatDate(state.eventDate))}</div>
+        <div class="date-row" style="justify-content:center;">
+          ${editingDate ? renderDateEditor() : `
+            <button class="btn btn-ghost" onclick="startEditDate()">שנה תאריך</button>
+            <button class="btn btn-ghost" onclick="clearEvent()">אפס</button>
+          `}
+        </div>
+      </div>
+    `;
+  }
+
+  if (t.mode === 'past') {
+    return `
+      <div class="card countdown-card">
+        <div class="card-title"><span class="card-title-icon">🔥</span>המדורה הבאה</div>
+        <div class="no-date">
+          <div class="no-date-text">המדורה האחרונה כבר עברה. הגיע הזמן לקבוע אחת חדשה!</div>
+          ${editingDate ? renderDateEditor() : `
+            <button class="btn btn-primary" onclick="startEditDate()">קבע תאריך חדש</button>
+          `}
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="card countdown-card">
+      <div class="card-title"><span class="card-title-icon">🔥</span>המדורה הבאה</div>
+      <div class="countdown-status">נשאר עד שמתחיל</div>
+      <div class="countdown-grid">
+        <div class="countdown-unit">
+          <div class="countdown-num">${t.seconds < 10 ? pad(t.seconds) : t.seconds}</div>
+          <div class="countdown-label">שניות</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num">${t.minutes}</div>
+          <div class="countdown-label">דקות</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num">${t.hours}</div>
+          <div class="countdown-label">שעות</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num">${t.days}</div>
+          <div class="countdown-label">ימים</div>
+        </div>
+      </div>
+      <div class="countdown-date">${escapeHtml(formatDate(state.eventDate))}</div>
+      <div class="date-row" style="justify-content:center;">
+        ${editingDate ? renderDateEditor() : `
+          <button class="btn btn-ghost" onclick="startEditDate()">שנה תאריך</button>
+          <button class="btn btn-ghost" onclick="clearEvent()">אפס</button>
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function renderDateEditor() {
+  const value = state.eventDate ? isoToLocalInput(state.eventDate) : '';
+  return `
+    <div class="date-row" style="margin-top:0.5rem;">
+      <input type="datetime-local" class="date-input" id="dateInput" value="${value}">
+      <button class="btn btn-primary" onclick="confirmDate()">שמור</button>
+      <button class="btn btn-ghost" onclick="cancelEditDate()">ביטול</button>
+    </div>
+  `;
+}
+
+function renderLocation() {
+  return `
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📍</span>מיקום</div>
+      <div class="location-display">${escapeHtml(DEFAULT_LOC_TEXT)}</div>
+      <a class="location-link" href="${escapeHtml(DEFAULT_LOC_URL)}" target="_blank" rel="noopener">
+        <span>🗺️</span><span>פתח בגוגל מפות</span>
+      </a>
+    </div>
+  `;
+}
+
+function renderAttendance() {
+  const yes = attendCount('yes');
+  const maybe = attendCount('maybe');
+  const no = attendCount('no');
+
+  const rows = MEMBERS.map(name => {
+    const status = state.attendance?.[name];
+    const isMe = name === myName;
+    const canEdit = !!myName;
+    const safeName = name.replace(/'/g, "\\'");
+    return `
+      <div class="member-row ${isMe ? 'is-me' : ''}">
+        <div class="member-name">
+          ${escapeHtml(name)}
+          ${isMe ? '<span class="me-badge">אני</span>' : ''}
+        </div>
+        <div class="attend-buttons">
+          <button class="attend-btn yes ${status === 'yes' ? 'active' : ''}"
+            ${canEdit ? '' : 'disabled'}
+            onclick="setAttendance('${safeName}', 'yes')">בא</button>
+          <button class="attend-btn maybe ${status === 'maybe' ? 'active' : ''}"
+            ${canEdit ? '' : 'disabled'}
+            onclick="setAttendance('${safeName}', 'maybe')">אולי</button>
+          <button class="attend-btn no ${status === 'no' ? 'active' : ''}"
+            ${canEdit ? '' : 'disabled'}
+            onclick="setAttendance('${safeName}', 'no')">לא</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">👥</span>מי מגיע?</div>
+      <div class="attendance-summary">
+        <div class="summary-pill yes">
+          <div class="summary-num">${yes}</div>
+          <div class="summary-label">באים</div>
+        </div>
+        <div class="summary-pill maybe">
+          <div class="summary-num">${maybe}</div>
+          <div class="summary-label">אולי</div>
+        </div>
+        <div class="summary-pill no">
+          <div class="summary-num">${no}</div>
+          <div class="summary-label">לא באים</div>
+        </div>
+      </div>
+      <div class="member-list">${rows}</div>
+    </div>
+  `;
+}
+
+function renderItems() {
+  const yes = attendCount('yes');
+  const maybe = attendCount('maybe');
+  const expected = yes + maybe * 0.5;
+
+  const meatItem = ITEMS.find(i => i.id === 'meat');
+  const drinksItem = ITEMS.find(i => i.id === 'drinks');
+  const beersItem = ITEMS.find(i => i.id === 'beers');
+
+  const meatNeeded = Math.round(expected * meatItem.perPerson * 10) / 10;
+  const meatHave = totalQty('meat');
+  const meatOk = meatHave >= meatNeeded && meatNeeded > 0;
+
+  const drinksNeeded = Math.ceil(expected * drinksItem.perPerson);
+  const drinksHave = totalQty('drinks');
+  const drinksOk = drinksHave >= drinksNeeded && drinksNeeded > 0;
+
+  const beersNeeded = Math.ceil(expected * beersItem.perPerson);
+  const beersHave = totalQty('beers');
+  const beersOk = beersHave >= beersNeeded && beersNeeded > 0;
+
+  const calcBanner = expected > 0 ? `
+    <div class="calc-banner">
+      <div class="calc-pill">
+        <div class="calc-pill-label">🥩 בשר</div>
+        <div class="calc-pill-value">${meatNeeded} ק״ג</div>
+        <div class="calc-pill-status ${meatOk ? 'ok' : 'short'}">
+          יש ${meatHave} ${meatOk ? '✓' : ''}
+        </div>
+      </div>
+      <div class="calc-pill">
+        <div class="calc-pill-label">🍺 בירות</div>
+        <div class="calc-pill-value">${beersNeeded} בירות</div>
+        <div class="calc-pill-status ${beersOk ? 'ok' : 'short'}">
+          יש ${beersHave} ${beersOk ? '✓' : ''}
+        </div>
+      </div>
+      <div class="calc-pill">
+        <div class="calc-pill-label">🥤 שתייה קלה</div>
+        <div class="calc-pill-value">${drinksNeeded} בקבוקים</div>
+        <div class="calc-pill-status ${drinksOk ? 'ok' : 'short'}">
+          יש ${drinksHave} ${drinksOk ? '✓' : ''}
+        </div>
+      </div>
+    </div>
+  ` : '';
+
+  const itemRows = ITEMS.map(item => {
+    const bringers = getBringers(item.id);
+    const iAmBringing = bringers.some(b => b.name === myName);
+    const hasBringers = bringers.length > 0;
+
+    const bringerChips = bringers.map(b => {
+      const isMe = b.name === myName;
+      const safeName = b.name.replace(/'/g, "\\'");
+      const qty = item.hasQty ? `<span class="qty-display">${b.qty}${item.unit ? ' ' + item.unit : ''}</span>` : '';
+      const qtyControls = isMe && item.hasQty ? `
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty('${item.id}', -${item.step})">−</button>
+          ${qty}
+          <button class="qty-btn" onclick="changeQty('${item.id}', ${item.step})">+</button>
+        </span>
+      ` : qty;
+      const removeBtn = isMe ? `<button class="bringer-remove" onclick="removeBringer('${item.id}', '${safeName}')">×</button>` : '';
+      return `
+        <span class="bringer-chip ${isMe ? 'is-me' : ''}">
+          ${escapeHtml(b.name)}${qtyControls}${removeBtn}
+        </span>
+      `;
+    }).join('');
+
+    const addBtn = !iAmBringing && myName ? `
+      <button class="add-me-btn" onclick="toggleBringing('${item.id}')">+ אני מביא</button>
+    ` : '';
+
+    return `
+      <div class="item-row ${hasBringers ? 'has-bringers' : ''}">
+        <div class="item-header">
+          <span class="item-icon">${item.icon}</span>
+          <span class="item-name">${escapeHtml(item.name)}</span>
+          ${hasBringers ? '<span class="item-check">✓</span>' : ''}
+        </div>
+        <div class="item-bringers">
+          ${bringerChips}
+          ${addBtn}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🎒</span>מי מביא מה?</div>
+      ${calcBanner}
+      <div class="item-list">${itemRows}</div>
+    </div>
+  `;
+}
+
+function renderIdentityPicker() {
+  return `
+    <div class="identity-overlay">
+      <div class="identity-modal">
+        <div class="identity-title">ברוכים הבאים</div>
+        <div class="identity-sub">מי אתה מהחבר'ה?</div>
+        <div class="identity-grid">
+          ${MEMBERS.map(n => `
+            <button class="identity-btn" onclick="pickIdentity('${n.replace(/'/g, "\\'")}')">${escapeHtml(n)}</button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (!myName) {
+    app.innerHTML = renderIdentityPicker();
+    return;
+  }
+  app.innerHTML = `
+    <header class="header">
+      <h1 class="brand">הסנוביה</h1>
+      <div class="brand-en">HASNOBIA</div>
+      <p class="tagline">— מועדון המדורה החודשית —</p>
+    </header>
+    <div class="divider-flame">▲ ▲ ▲</div>
+    <div class="cloud-hint">
+      <span class="sync-dot"></span>
+      משותף בענן · השינויים שלכם נראים אצל כולם בזמן אמת
+    </div>
+    ${renderCountdown()}
+    ${renderLocation()}
+    ${renderAttendance()}
+    ${renderItems()}
+    <div class="footer">
+      <div class="footer-me">
+        מחובר כ־<strong style="color:var(--gold);">${escapeHtml(myName)}</strong>
+        <span class="sync-dot"></span>
+      </div>
+      <a class="footer-link" onclick="changeIdentity()">החלף משתמש</a>
+    </div>
+  `;
+  setSyncStatus(syncStatus);
+}
+
+// Make render available globally for actions
+window.render = render;
+
+// ========== INIT ==========
+function spawnEmbers() {
+  const container = document.getElementById('emberContainer');
+  setInterval(() => {
+    if (document.hidden) return;
+    if (container.children.length > 8) return;
+    const e = document.createElement('div');
+    e.className = 'ember-particle';
+    e.style.left = Math.random() * 100 + '%';
+    e.style.animationDuration = (4 + Math.random() * 4) + 's';
+    e.style.animationDelay = '0s';
+    e.style.width = (2 + Math.random() * 3) + 'px';
+    e.style.height = e.style.width;
+    container.appendChild(e);
+    setTimeout(() => e.remove(), 9000);
+  }, 800);
+}
+
+let lastCountdownMode = 'none';
+function tickCountdown() {
+  if (!state.eventDate) return;
+  const t = timeUntil(state.eventDate);
+  if (!t || t.mode !== 'future') {
+    if (lastCountdownMode !== (t?.mode || 'none')) {
+      lastCountdownMode = t?.mode || 'none';
+      render();
+    }
+    return;
+  }
+  lastCountdownMode = 'future';
+  const nums = document.querySelectorAll('.countdown-num');
+  if (nums.length === 4) {
+    nums[0].textContent = t.seconds < 10 ? pad(t.seconds) : t.seconds;
+    nums[1].textContent = t.minutes;
+    nums[2].textContent = t.hours;
+    nums[3].textContent = t.days;
+  }
+}
+
+loadIdentity();
+setInterval(tickCountdown, 1000);
+spawnEmbers();
+</script>
+
+
+
+</body></html>
