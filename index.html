@@ -925,6 +925,46 @@ button { font-family:'Heebo',sans-serif; cursor:pointer; }
 /* Ensure pseudo-elements don't block the video */
 .id-ov.has-video::before,
 .id-ov.has-video::after { pointer-events:none; }
+/* ── BILL (חשבון מדורה) ── */
+.btn-bill{ background:linear-gradient(160deg,var(--fire) 0%,#9c5a26 100%); color:#fff; border-color:rgba(196,117,53,0.4); box-shadow:0 2px 12px rgba(196,117,53,0.25); }
+.btn-bill:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+.bill-modal{ position:fixed; inset:0; z-index:650; display:flex; align-items:flex-start; justify-content:center; padding:5vh 1rem; overflow-y:auto; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); animation:fdin 0.3s ease-out; }
+.bill-inner{ position:relative; max-width:460px; width:100%; background:linear-gradient(180deg,var(--surface-hi),var(--surface)); border:1px solid var(--border-warm); border-radius:var(--r-xl); padding:1.5rem 1.3rem 1.3rem; box-shadow:0 24px 70px rgba(0,0,0,0.7); animation:id-rise 0.4s var(--ease-out) both; cursor:default; }
+.bill-close{ position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; background:rgba(220,210,190,0.1); border:1px solid var(--border-warm); color:var(--cream); font-size:1.2rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.bill-close:hover{ background:rgba(220,210,190,0.2); }
+.bill-head{ display:flex; align-items:center; gap:.5rem; justify-content:center; margin-bottom:1rem; }
+.bill-emoji{ font-size:1.5rem; }
+.bill-title{ font-family:'Rubik',sans-serif; font-weight:700; font-size:1.25rem; color:var(--cream); }
+.bill-empty{ text-align:center; color:var(--cream-dim); padding:2rem 0; font-size:.95rem; }
+.bill-total{ text-align:center; background:var(--fire-soft); border:1px solid rgba(196,117,53,0.25); border-radius:var(--r-lg); padding:.9rem; margin-bottom:1rem; }
+.bt-main{ font-family:'Rubik',sans-serif; font-weight:800; font-size:2rem; color:var(--fire); line-height:1; }
+.bt-sub{ font-size:.85rem; color:var(--cream-dim); margin-top:.35rem; }
+.bill-people{ display:flex; flex-direction:column; gap:.7rem; }
+.bill-person{ background:rgba(220,210,190,0.04); border:1px solid var(--border); border-radius:var(--r-md); padding:.7rem .8rem; }
+.bill-person.me{ border-color:rgba(196,117,53,0.35); background:rgba(196,117,53,0.06); }
+.bp-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:.45rem; gap:.5rem; }
+.bp-name{ font-weight:700; color:var(--cream); font-size:.98rem; }
+.bp-paid{ font-size:.8rem; color:var(--cream-dim); white-space:nowrap; }
+.bp-items{ display:flex; flex-direction:column; gap:.35rem; margin-bottom:.5rem; }
+.bi-row{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; font-size:.88rem; color:var(--cream-dim); }
+.bi-name{ flex:1; }
+.bi-qty{ color:var(--cream-mute); font-size:.78rem; }
+.bi-none{ color:var(--cream-mute); font-size:.82rem; font-style:italic; }
+.cost-inp{ width:88px; text-align:left; background:var(--bg); border:1px solid var(--border-warm); border-radius:var(--r-sm); color:var(--cream); font-family:'Rubik',sans-serif; font-size:.9rem; padding:.35rem .5rem; }
+.cost-inp:focus{ outline:none; border-color:var(--fire); }
+.cost-ro{ color:var(--cream); font-weight:600; font-size:.88rem; min-width:54px; text-align:left; }
+.bp-bal{ text-align:left; font-weight:700; font-size:.92rem; padding-top:.45rem; border-top:1px dashed var(--border-warm); }
+.bp-bal.pos{ color:var(--yes-hi); }
+.bp-bal.neg{ color:var(--no-hi); }
+.bp-bal.zero{ color:var(--cream-mute); }
+.bill-tx{ margin-top:1.1rem; }
+.bill-sub{ font-size:.78rem; color:var(--cream-mute); margin-bottom:.5rem; letter-spacing:.5px; }
+.tx-row{ display:flex; align-items:center; gap:.35rem; font-size:.9rem; color:var(--cream); padding:.45rem .2rem; border-bottom:1px solid var(--border); }
+.tx-row b{ color:var(--cream); }
+.tx-amt{ color:var(--fire); font-weight:700; }
+.bill-allset{ text-align:center; color:var(--yes-hi); font-weight:600; padding:.6rem; }
+.btn-share{ width:100%; margin-top:1.1rem; justify-content:center; background:linear-gradient(160deg,#25d366,#1da851); color:#fff; border-color:transparent; font-weight:700; }
+.btn-share:hover{ filter:brightness(1.06); transform:translateY(-1px); }
 </style>
 </head>
 <body>
@@ -1063,6 +1103,7 @@ const IMG_SCHOOL  = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4K
 /* ── STATE ── */
 let state={eventDate:null,attendance:{},items:{}};
 let myName=null, editingDate=false, syncStatus='connecting', firstLoad=true;
+let showBill=false;
 let quoteIdx=Math.floor(Math.random()*QUOTES.length);
 
 /* ── FIREBASE (gated behind anonymous auth) ── */
@@ -1077,7 +1118,7 @@ onValue(eventRef,snap=>{
     document.getElementById('loadingScreen').style.display='none';
     document.getElementById('app').style.display='block';
   }
-  render();setTimeout(mountVideo,50);
+  render();setTimeout(mountVideo,50);if(showBill)refreshBillModal();
 },err=>{
   console.error(err);setSyncStatus('error');
   if(firstLoad){
@@ -1242,6 +1283,127 @@ window.removeBringer=async(itemId,name)=>{
   }catch(e){console.error(e);setSyncStatus('error')}
 };
 
+/* ── BILL (חשבון מדורה) ── */
+function fmtMoney(n){const r=Math.round((Number(n)||0)*100)/100;return r%1===0?String(r):r.toFixed(1);}
+function balLabel(b){const r=Math.round(b);if(r>0)return`מקבל ₪${r}`;if(r<0)return`משלם ₪${-r}`;return'מסודר ✓';}
+function balCls(b){const r=Math.round(b);return r>0?'pos':r<0?'neg':'zero';}
+
+function computeBill(){
+  const people={};
+  ITEMS.forEach(item=>{
+    const d=state.items?.[item.id];if(!d)return;
+    Object.values(d).forEach(b=>{
+      if(!b||!b.name)return;
+      const cost=Number(b.cost)||0;
+      (people[b.name]=people[b.name]||{paid:0,items:[]});
+      people[b.name].items.push({itemId:item.id,name:item.name,icon:item.icon,qty:item.hasQty?b.qty:null,unit:item.unit,cost});
+      people[b.name].paid+=cost;
+    });
+  });
+  const yesPeople=MEMBERS.filter(n=>state.attendance?.[n]==='yes');
+  const N=yesPeople.length;
+  const total=Object.values(people).reduce((s,p)=>s+p.paid,0);
+  const share=N>0?total/N:0;
+  const names=[...new Set([...yesPeople,...Object.keys(people)])];
+  const balances={};
+  names.forEach(n=>{const paid=people[n]?.paid||0;const owe=yesPeople.includes(n)?share:0;balances[n]=paid-owe;});
+  return{people,yesPeople,N,total,share,balances};
+}
+
+function settleUp(balances){
+  const cred=[],deb=[];
+  Object.entries(balances).forEach(([n,b])=>{const r=Math.round(b);if(r>0)cred.push({n,a:r});else if(r<0)deb.push({n,a:-r});});
+  cred.sort((x,y)=>y.a-x.a);deb.sort((x,y)=>y.a-x.a);
+  const tx=[];let i=0,j=0;
+  while(i<deb.length&&j<cred.length){
+    const pay=Math.min(deb[i].a,cred[j].a);
+    if(pay>0)tx.push({from:deb[i].n,to:cred[j].n,amt:pay});
+    deb[i].a-=pay;cred[j].a-=pay;
+    if(deb[i].a===0)i++;if(cred[j].a===0)j++;
+  }
+  return tx;
+}
+
+function renderBillContent(){
+  const {people,yesPeople,N,total,share,balances}=computeBill();
+  const head=`<button class="bill-close" onclick="closeBill()">×</button>
+    <div class="bill-head"><span class="bill-emoji">💰</span><div class="bill-title">חשבון מדורה</div></div>`;
+  const names=[...new Set([...Object.keys(people),...yesPeople])];
+  if(names.length===0)return head+`<div class="bill-empty">אף אחד עוד לא תפס פריטים ולא סימן הגעה — אין מה לחשב 🤷</div>`;
+  const order=names.sort((a,b)=>a===myName?-1:b===myName?1:a.localeCompare(b,'he'));
+  const blocks=order.map(name=>{
+    const p=people[name]||{paid:0,items:[]};
+    const mine=name===myName;
+    const rows=p.items.length?p.items.map(it=>{
+      const qtyTxt=it.qty?` <span class="bi-qty">${it.qty}${it.unit?' '+esc(it.unit):''}</span>`:'';
+      const cell=mine
+        ?`<input class="cost-inp" type="number" inputmode="decimal" min="0" step="1" value="${it.cost||''}" placeholder="₪0" onchange="setCost('${it.itemId}',this.value)">`
+        :`<span class="cost-ro">${it.cost?'₪'+fmtMoney(it.cost):'—'}</span>`;
+      return`<div class="bi-row"><span class="bi-name">${it.icon} ${esc(it.name)}${qtyTxt}</span>${cell}</div>`;
+    }).join(''):`<div class="bi-none">לא תפס פריטים</div>`;
+    const inSplit=yesPeople.includes(name);
+    const bal=balances[name]||0;
+    const balHtml=(inSplit||p.paid>0)?`<div class="bp-bal ${balCls(bal)}">${balLabel(bal)}</div>`:'';
+    return`<div class="bill-person ${mine?'me':''}">
+      <div class="bp-head"><span class="bp-name">${esc(name)}${mine?' (אתה)':''}</span><span class="bp-paid">שילם ₪${fmtMoney(p.paid)}</span></div>
+      <div class="bp-items">${rows}</div>
+      ${balHtml}
+    </div>`;
+  }).join('');
+  const tx=settleUp(balances);
+  const txHtml=tx.length
+    ?`<div class="bill-tx"><div class="bill-sub">🔄 העברות</div>${tx.map(t=>`<div class="tx-row">💸 <b>${esc(t.from)}</b> מעביר <span class="tx-amt">₪${t.amt}</span> ל־<b>${esc(t.to)}</b></div>`).join('')}</div>`
+    :`<div class="bill-tx"><div class="bill-allset">הכל מסודר — אין העברות 🎉</div></div>`;
+  return head+`
+    <div class="bill-total"><div class="bt-main">₪${fmtMoney(total)}</div><div class="bt-sub">${N} משתתפים · ₪${fmtMoney(share)} לאחד</div></div>
+    <div class="bill-people">${blocks}</div>
+    ${txHtml}
+    <button class="btn btn-share" onclick="shareBillWhatsApp()">📲 שתף בוואטסאפ</button>`;
+}
+
+window.openBill=()=>{showBill=true;buildBillModal();};
+window.closeBill=()=>{showBill=false;const m=document.querySelector('.bill-modal');if(m)m.remove();};
+function buildBillModal(){
+  const old=document.querySelector('.bill-modal');if(old)old.remove();
+  const m=document.createElement('div');
+  m.className='bill-modal';
+  m.innerHTML=`<div class="bill-inner">${renderBillContent()}</div>`;
+  m.addEventListener('click',e=>{if(e.target===m)closeBill();});
+  document.body.appendChild(m);
+}
+function refreshBillModal(){
+  const inner=document.querySelector('.bill-modal .bill-inner');
+  if(!inner)return;
+  const ae=document.activeElement;
+  if(ae&&ae.classList&&ae.classList.contains('cost-inp'))return;
+  inner.innerHTML=renderBillContent();
+}
+window.setCost=async(itemId,val)=>{
+  if(!myName)return;
+  let c=parseFloat(val);if(isNaN(c)||c<0)c=0;c=Math.round(c*100)/100;
+  setSyncStatus('connecting');
+  try{
+    const iRef=ref(db,`snobia/event/items/${itemId}`);
+    const snap=await get(iRef);const data=snap.val()||{};
+    const mk=Object.keys(data).find(k=>data[k]?.name===myName);if(!mk)return;
+    await update(ref(db,`snobia/event/items/${itemId}/${mk}`),{cost:c});
+  }catch(e){console.error(e);setSyncStatus('error');}
+};
+window.shareBillWhatsApp=()=>{
+  const {people,yesPeople,N,total,share,balances}=computeBill();
+  const lines=['🔥 חשבון מדורה',`💸 סה״כ: ₪${fmtMoney(total)} · ${N} משתתפים · ₪${fmtMoney(share)} לאחד`,''];
+  const names=[...new Set([...Object.keys(people),...yesPeople])].sort((a,b)=>a.localeCompare(b,'he'));
+  names.forEach(name=>{
+    const paid=people[name]?.paid||0;
+    const r=Math.round(balances[name]||0);
+    const tag=r>0?`מקבל ₪${r}`:r<0?`משלם ₪${-r}`:'מסודר';
+    lines.push(`• ${name}: שילם ₪${fmtMoney(paid)} → ${tag}`);
+  });
+  const tx=settleUp(balances);
+  if(tx.length){lines.push('','🔄 העברות:');tx.forEach(t=>lines.push(`${t.from} ➜ ${t.to}: ₪${t.amt}`));}
+  window.open(`https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`,'_blank');
+};
+
 /* ── RENDER ── */
 function dateEditor(){
   const v=state.eventDate?new Date(new Date(state.eventDate)-new Date(state.eventDate).getTimezoneOffset()*6e4).toISOString().slice(0,16):'';
@@ -1301,7 +1463,10 @@ function renderEventCard(){
     <div class="card reveal"><div class="card-body">
       <div class="section-label">האירוע הבא</div>
       <div class="nodate">המדורה האחרונה עברה — מגיע אחת חדשה!</div>
-      ${editingDate?dateEditor():`<button class="btn btn-primary" onclick="startEditDate()">📅 קבע תאריך חדש</button>`}
+      <div class="ev-actions" style="flex-wrap:wrap;justify-content:center;gap:.5rem">
+        ${editingDate?dateEditor():`<button class="btn btn-primary" onclick="startEditDate()">📅 קבע תאריך חדש</button>`}
+        ${(Date.now()-new Date(state.eventDate).getTime())>=2*864e5?`<button class="btn btn-bill" onclick="openBill()">💰 חשב חשבון</button>`:''}
+      </div>
     </div></div>`;
   return`
     <div class="card reveal"><div class="card-body">
