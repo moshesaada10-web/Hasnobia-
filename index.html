@@ -926,12 +926,8 @@ button { font-family:'Heebo',sans-serif; cursor:pointer; }
 .id-ov.has-video::before,
 .id-ov.has-video::after { pointer-events:none; }
 /* ── BILL (חשבון מדורה) ── */
-.btn-bill{ background:linear-gradient(160deg,var(--fire) 0%,#9c5a26 100%); color:#fff; border-color:rgba(196,117,53,0.4); box-shadow:0 2px 12px rgba(196,117,53,0.25); }
-.btn-bill:hover{ filter:brightness(1.08); transform:translateY(-1px); }
-.bill-modal{ position:fixed; inset:0; z-index:650; display:flex; align-items:flex-start; justify-content:center; padding:5vh 1rem; overflow-y:auto; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); animation:fdin 0.3s ease-out; }
-.bill-inner{ position:relative; max-width:460px; width:100%; background:linear-gradient(180deg,var(--surface-hi),var(--surface)); border:1px solid var(--border-warm); border-radius:var(--r-xl); padding:1.5rem 1.3rem 1.3rem; box-shadow:0 24px 70px rgba(0,0,0,0.7); animation:id-rise 0.4s var(--ease-out) both; cursor:default; }
-.bill-close{ position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; background:rgba(220,210,190,0.1); border:1px solid var(--border-warm); color:var(--cream); font-size:1.2rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.bill-close:hover{ background:rgba(220,210,190,0.2); }
+.btn-reset{ background:linear-gradient(160deg,var(--no-hi),var(--no)); color:#fff; border-color:rgba(160,56,56,0.4); box-shadow:0 2px 12px rgba(160,56,56,0.25); }
+.btn-reset:hover{ filter:brightness(1.08); transform:translateY(-1px); }
 .bill-head{ display:flex; align-items:center; gap:.5rem; justify-content:center; margin-bottom:1rem; }
 .bill-emoji{ font-size:1.5rem; }
 .bill-title{ font-family:'Rubik',sans-serif; font-weight:700; font-size:1.25rem; color:var(--cream); }
@@ -1068,6 +1064,7 @@ const ITEMS = [
   {id:'beers',     name:'בירות',       icon:'🍺', hasQty:true, unit:'בירות', perPerson:2, step:1, funny:'הרשטיק אחראי — אלוהים יעזור'},
   {id:'water',     name:'מים',         icon:'💧', hasQty:true, step:1, funny:''},
   {id:'snacks',    name:'פיצוחים',     icon:'🥜', funny:'אין דבר כזה יותר מדי'},
+  {id:'pineapple', name:'אננסים',      icon:'🍍', hasQty:true, unit:'אננסים', step:1, funny:''},
   {id:'lighting',  name:'תאורה',       icon:'💡', hasQty:true, step:1, funny:''},
   {id:'chairs',    name:'כסאות',       icon:'💺', hasQty:true, step:1, neededByPeople:true, funny:'אחד עומד — כולם עומדים'},
   {id:'table',     name:'שולחן',       icon:'🟫', funny:''},
@@ -1103,7 +1100,6 @@ const IMG_SCHOOL  = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4K
 /* ── STATE ── */
 let state={eventDate:null,attendance:{},items:{}};
 let myName=null, editingDate=false, syncStatus='connecting', firstLoad=true;
-let showBill=false;
 let quoteIdx=Math.floor(Math.random()*QUOTES.length);
 
 /* ── FIREBASE (gated behind anonymous auth) ── */
@@ -1118,7 +1114,7 @@ onValue(eventRef,snap=>{
     document.getElementById('loadingScreen').style.display='none';
     document.getElementById('app').style.display='block';
   }
-  render();setTimeout(mountVideo,50);if(showBill)refreshBillModal();
+  render();setTimeout(mountVideo,50);
 },err=>{
   console.error(err);setSyncStatus('error');
   if(firstLoad){
@@ -1324,12 +1320,12 @@ function settleUp(balances){
   return tx;
 }
 
-function renderBillContent(){
+function renderBill(){
   const {people,yesPeople,N,total,share,balances}=computeBill();
-  const head=`<button class="bill-close" onclick="closeBill()">×</button>
-    <div class="bill-head"><span class="bill-emoji">💰</span><div class="bill-title">חשבון מדורה</div></div>`;
   const names=[...new Set([...Object.keys(people),...yesPeople])];
-  if(names.length===0)return head+`<div class="bill-empty">אף אחד עוד לא תפס פריטים ולא סימן הגעה — אין מה לחשב 🤷</div>`;
+  if(names.length===0)return '';
+  const head=`<div class="section-label">💰 חשבון מדורה</div>`;
+  if(N===0)return `<div class="card reveal"><div class="card-body">${head}<div class="bill-empty">עדיין אף אחד לא סימן ״מגיע ✓״ — אי אפשר לחשב חלוקה</div></div></div>`;
   const order=names.sort((a,b)=>a===myName?-1:b===myName?1:a.localeCompare(b,'he'));
   const blocks=order.map(name=>{
     const p=people[name]||{paid:0,items:[]};
@@ -1337,7 +1333,7 @@ function renderBillContent(){
     const rows=p.items.length?p.items.map(it=>{
       const qtyTxt=it.qty?` <span class="bi-qty">${it.qty}${it.unit?' '+esc(it.unit):''}</span>`:'';
       const cell=mine
-        ?`<input class="cost-inp" type="number" inputmode="decimal" min="0" step="1" value="${it.cost||''}" placeholder="₪0" onchange="setCost('${it.itemId}',this.value)">`
+        ?`<input class="cost-inp" type="number" inputmode="decimal" min="0" step="1" value="${it.cost||''}" placeholder="₪0" data-item-id="${it.itemId}" onchange="setCost('${it.itemId}',this.value)">`
         :`<span class="cost-ro">${it.cost?'₪'+fmtMoney(it.cost):'—'}</span>`;
       return`<div class="bi-row"><span class="bi-name">${it.icon} ${esc(it.name)}${qtyTxt}</span>${cell}</div>`;
     }).join(''):`<div class="bi-none">לא תפס פריטים</div>`;
@@ -1354,30 +1350,15 @@ function renderBillContent(){
   const txHtml=tx.length
     ?`<div class="bill-tx"><div class="bill-sub">🔄 העברות</div>${tx.map(t=>`<div class="tx-row">💸 <b>${esc(t.from)}</b> מעביר <span class="tx-amt">₪${t.amt}</span> ל־<b>${esc(t.to)}</b></div>`).join('')}</div>`
     :`<div class="bill-tx"><div class="bill-allset">הכל מסודר — אין העברות 🎉</div></div>`;
-  return head+`
+  return `<div class="card reveal"><div class="card-body">
+    ${head}
     <div class="bill-total"><div class="bt-main">₪${fmtMoney(total)}</div><div class="bt-sub">${N} משתתפים · ₪${fmtMoney(share)} לאחד</div></div>
     <div class="bill-people">${blocks}</div>
     ${txHtml}
-    <button class="btn btn-share" onclick="shareBillWhatsApp()">📲 שתף בוואטסאפ</button>`;
+    <button class="btn btn-share" onclick="shareBillWhatsApp()">📲 שתף בוואטסאפ</button>
+  </div></div>`;
 }
 
-window.openBill=()=>{showBill=true;buildBillModal();};
-window.closeBill=()=>{showBill=false;const m=document.querySelector('.bill-modal');if(m)m.remove();};
-function buildBillModal(){
-  const old=document.querySelector('.bill-modal');if(old)old.remove();
-  const m=document.createElement('div');
-  m.className='bill-modal';
-  m.innerHTML=`<div class="bill-inner">${renderBillContent()}</div>`;
-  m.addEventListener('click',e=>{if(e.target===m)closeBill();});
-  document.body.appendChild(m);
-}
-function refreshBillModal(){
-  const inner=document.querySelector('.bill-modal .bill-inner');
-  if(!inner)return;
-  const ae=document.activeElement;
-  if(ae&&ae.classList&&ae.classList.contains('cost-inp'))return;
-  inner.innerHTML=renderBillContent();
-}
 window.setCost=async(itemId,val)=>{
   if(!myName)return;
   let c=parseFloat(val);if(isNaN(c)||c<0)c=0;c=Math.round(c*100)/100;
@@ -1465,7 +1446,7 @@ function renderEventCard(){
       <div class="nodate">המדורה האחרונה עברה — מגיע אחת חדשה!</div>
       <div class="ev-actions" style="flex-wrap:wrap;justify-content:center;gap:.5rem">
         ${editingDate?dateEditor():`<button class="btn btn-primary" onclick="startEditDate()">📅 קבע תאריך חדש</button>`}
-        ${(Date.now()-new Date(state.eventDate).getTime())>=2*864e5?`<button class="btn btn-bill" onclick="openBill()">💰 חשב חשבון</button>`:''}
+        <button class="btn btn-reset" onclick="clearEvent()">🗑️ אפס מדורה</button>
       </div>
     </div></div>`;
   return`
@@ -1633,6 +1614,11 @@ function render(){
   const app=document.getElementById('app');
   if(!myName){app.innerHTML=renderIdPicker();setTimeout(spawnIdEmbers,300);return}
 
+  const _fa=document.activeElement;
+  let _fc=null;
+  if(_fa&&_fa.classList&&_fa.classList.contains('cost-inp')){
+    _fc={id:_fa.dataset.itemId,val:_fa.value,sel:_fa.selectionStart};
+  }
   app.innerHTML=`
     <div class="page">
       ${renderHero()}
@@ -1643,6 +1629,7 @@ function render(){
         ${renderLocation()}
         ${renderAttendance()}
         ${renderItems()}
+        ${renderBill()}
         ${renderMemories()}
         ${renderVideo()}
         <footer class="ft">
@@ -1652,6 +1639,11 @@ function render(){
         </footer>
       </div>
     </div>`;
+
+  if(_fc){
+    const _el=document.querySelector(`.cost-inp[data-item-id="${_fc.id}"]`);
+    if(_el){_el.value=_fc.val;_el.focus();try{_el.setSelectionRange(_fc.sel,_fc.sel)}catch(e){}}
+  }
 
   setSyncStatus(syncStatus);
   initParallax();
