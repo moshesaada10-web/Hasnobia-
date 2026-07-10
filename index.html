@@ -1211,10 +1211,25 @@ let quoteIdx=Math.floor(Math.random()*QUOTES.length);
 
 /* ── FIREBASE (gated behind anonymous auth) ── */
 let _syncStarted=false;
+// Auto-reset the event one day after it happened, so the app is fresh for the next round.
+const RESET_AFTER_MS = 24*60*60*1000; // one day (24h) after the event's start time
+let _autoResetTried = false;
+function maybeAutoReset(){
+  if(_autoResetTried) return;
+  const iso = state.eventDate;
+  if(!iso) return;
+  const t = new Date(iso).getTime();
+  if(isNaN(t)) return;
+  if(Date.now() - t > RESET_AFTER_MS){
+    _autoResetTried = true;
+    set(eventRef,{eventDate:null,attendance:{},items:{}}).catch(e=>console.error('auto-reset failed',e));
+  }
+}
 function startSync(){
 onValue(eventRef,snap=>{
   const d=snap.val();
   state={eventDate:d?.eventDate||null,attendance:d?.attendance||{},items:d?.items||{}};
+  maybeAutoReset();
   setSyncStatus('ok');
   if(firstLoad){
     firstLoad=false;
